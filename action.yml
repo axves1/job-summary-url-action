@@ -28,6 +28,10 @@ inputs:
     description: 'A unique string for the workflow run job. Or `latest`. Defaults to `latest`.'
     required: true
     default: ${{ github.job }}
+  github-token:
+    description: 'The GitHub token. Defaults to `GITHUB_TOKEN`.'
+    required: true
+    default: ${{ github.token }}
 
 outputs:
   run_url:
@@ -47,7 +51,7 @@ runs:
   using: "composite"
   steps:
     - id: script
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       env:
         REPOSITORY: ${{ inputs.repository }}
         SERVER_URL: ${{ inputs.server_url }}
@@ -56,6 +60,7 @@ runs:
         RUN_ATTEMPT: ${{ inputs.run_attempt }}
         JOB: ${{ inputs.job }}
       with:
+        github-token: ${{ inputs.github-token }}
         script: |
           const LATEST = 'latest'
           let {REPOSITORY, SERVER_URL, WORKFLOW, RUN_ID, RUN_ATTEMPT, JOB} = process.env
