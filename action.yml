@@ -100,7 +100,10 @@ runs:
           if (JOB === LATEST) {
             job = jobs.data.jobs[jobs.data.jobs.length - 1]
           } else {
-            job = jobs.data.jobs.find(j => j.name === JOB)
+            job = jobs.data.jobs.find(j => {
+                const parts = j.name.split(' / ');
+                return j.name === JOB || (parts.length === 2 && parts[0] === JOB);
+            });
             if (job === undefined) {
               throw new Error(`Couldn't find '${JOB}' among ${jobs.data.jobs.map(j => `'${j.name}'`).join(', ')}`)
             }
